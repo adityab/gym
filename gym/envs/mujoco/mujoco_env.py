@@ -82,7 +82,7 @@ class MujocoEnv(gym.Env):
         ob = self.reset_model()
         if self.viewer is not None:
             self.viewer.autoscale()
-            self.viewer_setup()
+        self.viewer_setup()
         return ob
 
     def set_state(self, qpos, qvel):
@@ -97,8 +97,8 @@ class MujocoEnv(gym.Env):
         return self.model.opt.timestep * self.frame_skip
 
     def do_simulation(self, ctrl, n_frames):
-        self.sim.data.ctrl[:] = ctrl
         for _ in range(n_frames):
+            self.sim.data.ctrl[:] = ctrl
             self.sim.step()
 
     def _render(self, mode='human', close=False):
