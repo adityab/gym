@@ -16,7 +16,7 @@ class MujocoEnv(gym.Env):
     """Superclass for all MuJoCo environments.
     """
 
-    def __init__(self, model_path, frame_skip, width, height):
+    def __init__(self, model_path, frame_skip, width=300, height=300, obs_type='lowdim'):
         if model_path.startswith("/"):
             fullpath = model_path
         else:
@@ -29,7 +29,8 @@ class MujocoEnv(gym.Env):
         self.model = mujoco_py.load_model_from_path(fullpath)
         self.sim = MjSim(self.model)
         self.viewer = None
-
+        self.render_ok = False 
+        self.obs_type = obs_type
         self.metadata = {
             'render.modes': ['human', 'rgb_array'],
             'video.frames_per_second': int(np.round(1.0 / self.dt))
@@ -50,6 +51,7 @@ class MujocoEnv(gym.Env):
         low = -high
         self.observation_space = spaces.Box(low, high)
 
+        self.render_ok = True
         self._seed()
 
     def _seed(self, seed=None):
@@ -107,7 +109,7 @@ class MujocoEnv(gym.Env):
                 self._get_viewer().finish()
                 self.viewer = None
             return
-        img = self.sim.render(self.width, self.height)
+        self.img = img = self.sim.render(self.width, self.height)
         if mode == 'rgb_array':
             return img
         elif mode == 'human':

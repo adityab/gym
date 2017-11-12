@@ -39,8 +39,8 @@ class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle):
 
     def viewer_setup(self):
         if len(self.sim.render_contexts) and not self.cam_done:
-            cam.type = 1 # Tracking
             cam = self.sim.render_contexts[0].cam
+            cam.type = 1 # Tracking
             cam.distance = self.model.stat.extent * 0.5
             cam.trackbodyid = 1
             functions.mjv_updateCamera(self.sim.model, self.sim.data, cam, self.sim.render_contexts[0].scn)

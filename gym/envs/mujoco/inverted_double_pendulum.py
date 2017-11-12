@@ -10,7 +10,7 @@ class InvertedDoublePendulumEnv(mujoco_env.MujocoEnv, utils.EzPickle):
     def __init__(self):
         mujoco_env.MujocoEnv.__init__(self,
                 'inverted_double_pendulum.xml',
-                frame_skip=5,
+                frame_skip=1,
                 width=300,
                 height=300)
         utils.EzPickle.__init__(self)
@@ -47,6 +47,7 @@ class InvertedDoublePendulumEnv(mujoco_env.MujocoEnv, utils.EzPickle):
     def viewer_setup(self):
         if len(self.sim.render_contexts) and not self.cam_done:
             cam = self.sim.render_contexts[0].cam
+            cam.type = 1 # Tracking
             cam.trackbodyid = 1
             cam.distance = self.model.stat.extent * 0.5
             cam.lookat[2] += 3  # v.model.stat.center[2]

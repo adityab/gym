@@ -35,6 +35,7 @@ class InvertedPendulumEnv(mujoco_env.MujocoEnv, utils.EzPickle):
     def viewer_setup(self):
         if len(self.sim.render_contexts) and not self.cam_done:
             cam = self.sim.render_contexts[0].cam
+            cam.type = 1 # Tracking
             cam.trackbodyid = 1
             cam.distance = self.model.stat.extent
             functions.mjv_updateCamera(self.sim.model, self.sim.data, cam, self.sim.render_contexts[0].scn)
